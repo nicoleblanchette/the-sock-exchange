@@ -1,0 +1,17 @@
+{
+  "name": "the-sock-exchange",
+  "version": "1.0.0",
+  "description": "Welcome to The Sock Exchange - your one-stop-shop for reuniting lost soles!",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --watch server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
