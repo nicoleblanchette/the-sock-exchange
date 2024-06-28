@@ -1,47 +1,74 @@
 //import { useNavigate } from "react-router-dom";
+import { Form } from "react-router-dom";
 import { fetchHandler, getPostOptions } from "../utils/fetching";
 import { useState } from "react";
 export const AddSock = () => {
     //const navigate = useNavigate()
 
 	const [statusText, setStatusText] = useState("")
-	const [formData, setFormData] = useState({
-		userId: "",
-        sockDetails: {
+    const [sockDetails, setSockDetails] = useState({
             size: "",
             color: "",
             pattern: "",
             material: "",
             condition: "",
             forFoot: ""
-        },
-        additionalFeatures: {
-            waterResistant:  false,
-            padded: false,
-            antiBacterial: false
-        },
+    })
+    const [additionalFeatures, setAdditionalFeatures] = useState({
+        waterResistant:  false,
+        padded: false,
+        antiBacterial: false
+    },)
+	const [formData, setFormData] = useState({
+		userId: "",
+        sockDetails: {},
+        additionalFeatures: {},
         addedTimestamp: ''
 	})
 
 
     //addedTimestamp: "2024-01-27T10:00:00Z" include timestamp in handleSubmit
 
-    const handleInputChange = e => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
           ...prevData,
           [name]: value,
         }));
+        console.log({formData, sockDetails, additionalFeatures})
       };
+    
+      const handleDetailChange = (e) => {
+        const { name, value } = e.target;
+        setSockDetails(prevData => ({
+          ...prevData,
+          [name]: value,
+        }));
+        console.log({formData, sockDetails, additionalFeatures})
+      }
+
+      const handleAddtlFeatureChange = (e) => {
+        const { name } = e.target;
+        const value = additionalFeatures[name]
+        setAdditionalFeatures(prevData => ({
+          ...prevData,
+          [name]: !value,
+        }));
+        console.log({formData, sockDetails, additionalFeatures})
+      }
 
 	const handleSubmit = async event => {
 		event.preventDefault()
 		setStatusText("")
         const url = 'https://ecs.the-sock-exchange.com/api/socks'
+        const time = new Date()
         setFormData(prevData => ({
             ...prevData,
-            [addedTimestamp]: Date.now(),
+            addedTimestamp: time.toISOString(), //this gives an error but the response is still 204
+            sockDetails: sockDetails,
+            additionalFeatures: additionalFeatures,
           }));
+          console.log(formData)
 		//const [sock, error] = await createUser(formData)
         const [sock, error] = await fetchHandler(url, getPostOptions(formData))
         console.log(sock)
@@ -68,7 +95,7 @@ export const AddSock = () => {
         </div>
         <div className="form-group">
           <label htmlFor="size">Size</label>
-          <select className="form-control" id="size" name="size" value={formData.sockDetails.size} onChange={handleInputChange}>
+          <select className="form-control" id="size" name="size" value={sockDetails.size} onChange={handleDetailChange}>
             <option>Small</option>
             <option>Medium</option>
             <option>Large</option>
@@ -76,7 +103,7 @@ export const AddSock = () => {
         </div>
         <div className="form-group">
           <label htmlFor="color">Color</label>
-          <input type="text" className="form-control" id="color" name="color" value={formData.sockDetails.color} onChange={handleInputChange}/>
+          <input type="text" className="form-control" id="color" name="color" value={sockDetails.color} onChange={handleDetailChange}/>
         </div>
         <div className="form-group">
           <label htmlFor="pattern">Pattern</label>
@@ -85,8 +112,8 @@ export const AddSock = () => {
             className="form-control"
             id="pattern"
             name="pattern"
-            value={formData.pattern}
-            onChange={handleInputChange}
+            value={sockDetails.pattern}
+            onChange={handleDetailChange}
           />
         </div>
         <div className="form-group">
@@ -96,20 +123,20 @@ export const AddSock = () => {
             className="form-control"
             id="material"
             name="material"
-            value={formData.sockDetails.material}
-            onChange={handleInputChange}
+            value={sockDetails.material}
+            onChange={handleDetailChange}
           />
         </div>
         <div className="form-group">
           <label htmlFor="condition">Condition</label>
-          <select className="form-control" id="condition" name="condition" value={formData.sockDetails.condition} onChange={handleInputChange}>
+          <select className="form-control" id="condition" name="condition" value={sockDetails.condition} onChange={handleDetailChange}>
             <option>Used</option>
             <option>New</option>
           </select>
         </div>
         <div className="form-group">
           <label htmlFor="forFoot">For Foot</label>
-          <select className="form-control" id="forFoot" name="forFoot" value={formData.sockDetails.forFoot} onChange={handleInputChange}>
+          <select className="form-control" id="forFoot" name="forFoot" value={sockDetails.forFoot} onChange={handleDetailChange}>
             <option>Left</option>
             <option>Right</option>
             <option>Both</option>
@@ -122,8 +149,8 @@ export const AddSock = () => {
               type="checkbox"
               id="waterResistant"
               name="waterResistant"
-              value={formData.additionalFeatures.waterResistant}
-              onChange={handleInputChange}
+              value={additionalFeatures.waterResistant}
+              onChange={handleAddtlFeatureChange}
             />
             <label className="form-check-label" htmlFor="waterResistant">
               Water Resistant
@@ -135,8 +162,8 @@ export const AddSock = () => {
               type="checkbox"
               id="padded"
               name="padded"
-              value={formData.additionalFeatures.padded}
-              onChange={handleInputChange}
+              value={additionalFeatures.padded}
+              onChange={handleAddtlFeatureChange}
             />
             <label className="form-check-label" htmlFor="padded">
               Padded
@@ -148,8 +175,8 @@ export const AddSock = () => {
               type="checkbox"
               id="antiBacterial"
               name="antiBacterial"
-              value={formData.additionalFeatures.antiBacterial}
-              onChange={handleInputChange}
+              value={additionalFeatures.antiBacterial}
+              onChange={handleAddtlFeatureChange}
             />
             <label className="form-check-label" htmlFor="antiBacterial">
               Anti Bacterial
