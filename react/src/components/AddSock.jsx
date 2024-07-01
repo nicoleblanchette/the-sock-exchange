@@ -7,12 +7,12 @@ export const AddSock = () => {
 
 	const [statusText, setStatusText] = useState("")
     const [sockDetails, setSockDetails] = useState({
-            size: "",
+            size: "Small",
             color: "",
             pattern: "",
             material: "",
-            condition: "",
-            forFoot: ""
+            condition: "Used",
+            forFoot: "Left"
     })
     const [additionalFeatures, setAdditionalFeatures] = useState({
         waterResistant:  false,
@@ -64,11 +64,11 @@ export const AddSock = () => {
         const time = new Date()
         setFormData(prevData => ({
             ...prevData,
-            addedTimestamp: time.toISOString(), //this gives an error but the response is still 204
+          //  addedTimestamp: time.toISOString(), //this gives an error but the response is still 204
             sockDetails: sockDetails,
             additionalFeatures: additionalFeatures,
           }));
-          console.log(formData)
+      //    console.log(formData)
 		//const [sock, error] = await createUser(formData)
         const [sock, error] = await fetchHandler(url, getPostOptions(formData))
         console.log(sock)

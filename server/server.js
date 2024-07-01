@@ -63,21 +63,22 @@ app.post("/socks/search", async (req, res) => {
     // TODO: Add code that can search MongoDB based on a color value
     // from the Search text box.
     // grab the search input
-    //const query = req.body.searchTerm
-    return console.log(1)
+    const query = req.body.searchTerm
+    //return console.log(1)
     const client = await MongoClient.connect(url);
-    return console.log('h')
+    //return console.log('h')
     const db = client.db(dbName);
-    const collection = db.collection.collection(collectionName);
-    const socks = await collection.find({}).toArray();
-   return console.log(socks);
+    const collection = db.collection(collectionName);
+    const socks = await collection.find({"sockDetails.color": query}).toArray();
+  // return console.log(socks);
+ // console.log(socks)
     client.close();
-    return socks;
+    return res.json(socks);
   } catch (err) {
     console.error("Error:", err);
     res
       .status(500)
-      .send("Hmm, something doesn't smell right... Error searching for socks");
+      .send(err.message);
   }
 });
 
@@ -87,20 +88,29 @@ app.post("/socks", async (req, res) => {
     console.log(
       "If POST Malone were a sock, he'd be the one with the most colorful pattern."
     );
+const formData = req.body
+    console.log(req.body)
+    
+    const client = await MongoClient.connect(url)
+    const collection = db.collection(collectionName)
+    const insertSock = await collection.insertOne(formData)
+    const sock = await collection.findOne({id: insertSock._id})
     // Simulate creating a user
-    const { username, email } = req.body;
-    if (!username || !email) {
+   // const { username, email } = req.body;
+   // if (!username || !email) {
       // Bad request if username or email is missing
-      return res
-        .status(400)
-        .send({ error: "Username and email are required." });
-    }
-
+    //   return res
+    //     .status(400)
+    //     .send({ error: "Username and email are required." });
+    // }
+    console.log('hi')
+    console.log(sock)
     // Respond with the created user information and a 201 Created status
     res.status(201).send({
       status: "success",
-      location: "http://localhost:3000/users/1234", // This URL should point to the newly created user
-      message: "User created successfully.",
+    //  location: "http://localhost:3000/users/1234", // This URL should point to the newly created user
+      message: "Sock created successfully.",
+      sock: sock
     });
   } catch (err) {
     console.error("Error:", err);

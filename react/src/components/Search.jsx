@@ -15,9 +15,7 @@ export const Search = (props) => {
     .then((response) => response.json())
     .then((data) => {
         // Handle the response data
-
         props.setData(data)
-        console.log(data)
     })
     .catch((error) => {
         // Handle any errors
