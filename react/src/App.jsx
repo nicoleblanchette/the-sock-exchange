@@ -6,7 +6,10 @@ import React, { useState, useEffect } from "react";
 import { Home } from "./components/Home";
 import About from "./components/About";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { AddSock } from "./components/AddSock";
+import AddSock from "./components/AddSock";
+import RequireAuth from "./components/RequireAuth";
+import { AuthProvider } from "./hooks/AuthContext";
+import LoginForm from "./components/LoginForm";
 
 function App() {
   const [data, setData] = useState([]);
@@ -97,6 +100,7 @@ function App() {
               Both socks and space rockets 🚀 will take you to new heights, but
               only one will get cold feet!
               <Featured />
+              <AuthProvider>
               <Routes>
                 <Route
                   exact
@@ -104,8 +108,12 @@ function App() {
                   element={<Home data={data} handleDelete={handleDelete} />}
                 />
                 <Route path="/about" element={<About />} />
-                <Route path="/add-sock" element={<AddSock setData={setData} />} />
+              
+                <Route path="/add-sock" element={<RequireAuth><AddSock setData={setData} /></RequireAuth>} />
+                <Route path="/login" element={<LoginForm />}  />
               </Routes>
+
+              </AuthProvider>
               <Footer environment={"Development"} />
             </div>
           </div>
