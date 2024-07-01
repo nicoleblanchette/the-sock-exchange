@@ -2,7 +2,7 @@
 import { Form } from "react-router-dom";
 import { fetchHandler, getPostOptions } from "../utils/fetching";
 import { useState } from "react";
-export const AddSock = () => {
+export const AddSock = ({setData}) => {
     //const navigate = useNavigate()
 
 	const [statusText, setStatusText] = useState("")
@@ -60,7 +60,7 @@ export const AddSock = () => {
 	const handleSubmit = async event => {
 		event.preventDefault()
 		setStatusText("")
-        const url = 'https://ecs.the-sock-exchange.com/api/socks'
+        const url = 'http://localhost:3000/socks'
         const time = new Date()
         setFormData(prevData => ({
             ...prevData,
@@ -72,7 +72,8 @@ export const AddSock = () => {
 		//const [sock, error] = await createUser(formData)
         const [sock, error] = await fetchHandler(url, getPostOptions(formData))
         console.log(sock)
-        if (sock) return setStatusText('success!')
+
+        if (sock) return setStatusText('success!'); setData(prevData => [...prevData, formData])
 		if (error) return setStatusText(error.message)
 		//navigate(-1)
 	}

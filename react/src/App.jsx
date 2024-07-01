@@ -104,7 +104,7 @@ function App() {
                   element={<Home data={data} handleDelete={handleDelete} />}
                 />
                 <Route path="/about" element={<About />} />
-                <Route path="/add-sock" element={<AddSock />} />
+                <Route path="/add-sock" element={<AddSock setData={setData} />} />
               </Routes>
               <Footer environment={"Development"} />
             </div>
